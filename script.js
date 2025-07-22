@@ -13,7 +13,9 @@ function result() {
     if (data[0] == 0) {
         data = []
     }
-    cod = 0
+    if(parseFloat(eval(data.join('')))){
+        cod=0
+    }
     printar()
 }
 function num(num) {
