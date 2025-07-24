@@ -29,7 +29,7 @@ function del() {
     printar()
 }
 function ac() {
-    data = [], cod[0] = 0
+    data = [], cod = [0,0]
     printar()
 }
 
