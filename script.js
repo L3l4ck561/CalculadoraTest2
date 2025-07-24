@@ -8,20 +8,22 @@ function printar() {
     display.innerHTML = 0
 }
 function result() {
-        if (cod % 2 == 1 && typeof (data[data.length - 1]) == 'number') { data.push(')') }
-        data = [parseFloat(eval(data.join('')))]
-        if (data[0] == 0) {
-            data = []
-        }
-        cod = 0
-        printar()
+    if (cod % 2 == 1 && typeof (data[data.length - 1]) == 'number') { data.push(')') }
+    data = [parseFloat(eval(data.join('')))]
+    if (data[0] == 0) {
+        data = []
+    }
+    cod = 0
+    printar()
 }
 function num(num) {
-    data.push(num)
+    if (data[data.length - 1] == ')') {
+        data.push('*', num)
+    } else { data.push(num) }
     printar()
 }
 function del() {
-    if (cod != 0 && data[data.length - 1] == ')'|| data[data.length - 1] == '(') { cod-- }
+    if (cod != 0 && data[data.length - 1] == ')' || data[data.length - 1] == '(') { cod-- }
     data.pop()
     printar()
 }
@@ -31,33 +33,33 @@ function ac() {
 }
 
 function operador(op) {
-    if (!data.length && op == '.') {
-        data.push(0, op)
-        return printar()
-    }
-
-    if (op == 'cod' && data[data.length - 1] != '.') {
+    if (!data.length) {
+        switch (op) {
+            case '.':
+                data.push(0, op)
+                break;
+            case '-':
+                data.push(op)
+                break;
+            case 'cod':
+                data.push('('); cod++
+                break;
+        }
+    } else if (op == 'cod' && data[data.length - 1] != '.') {
         op = cod % 2 == 0 ? '(' : ')'
         if (typeof (data[data.length - 1]) == 'number' && cod % 2 == 0 || data[data.length - 1] == ')') {
-            data.push('*', op)
-        } else if (cod % 2 == 1) {
-            if (typeof (data[data.length - 1]) == 'number') {
-                data.push(op)
-            } else {
-                return
-            }
-        } else {
+            data.push('*', op); cod++
+        } else if (cod % 2 == 1 && typeof (data[data.length - 1]) == 'number') {
+            data.push(op); cod++
+        } else if (cod % 2 == 0) {
+            data.push(op); cod++
+        }
+    } else {
+        if (typeof (data[data.length - 1]) == 'number' || (data[data.length - 1] == ')' && op != '.')) {
             data.push(op)
         }
-        cod++
-        return printar()
     }
-
-    //operadores
-    if (typeof (data[data.length - 1]) == 'number' || (data[data.length - 1] == ')' && op != '.')) {
-        data.push(op)
-        return printar()
-    }
+    printar()
 }
 
 // darkMode
