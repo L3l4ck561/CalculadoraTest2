@@ -1,5 +1,5 @@
 const display = document.getElementsByClassName('display')[0]
-let data = [], cod = 0
+let data = [], cod = [0,0]
 
 function printar() {
     if (data.length) {
@@ -8,12 +8,12 @@ function printar() {
     display.innerHTML = 0
 }
 function result() {
-    if (cod % 2 == 1 && typeof (data[data.length - 1]) == 'number') { data.push(')') }
+    if (cod[0] % 2 == 1 && typeof (data[data.length - 1]) == 'number') { data.push(')') }
     data = [parseFloat(eval(data.join('')))]
     if (data[0] == 0) {
         data = []
     }
-    cod = 0
+    cod[0] = 0
     printar()
 }
 function num(num) {
@@ -23,12 +23,13 @@ function num(num) {
     printar()
 }
 function del() {
-    if (cod != 0 && data[data.length - 1] == ')' || data[data.length - 1] == '(') { cod-- }
+    if (cod[0] != 0 && data[data.length - 1] == ')' || data[data.length - 1] == '(') { cod[0]-- }
+    if (data[data.length - 1] == '.') { cod[1]=0 }
     data.pop()
     printar()
 }
 function ac() {
-    data = [], cod = 0
+    data = [], cod[0] = 0
     printar()
 }
 
@@ -36,28 +37,31 @@ function operador(op) {
     if (!data.length) {
         switch (op) {
             case '.':
-                data.push(0, op)
+                data.push(0, op); cod[1] = 1
                 break;
             case '-':
                 data.push(op)
                 break;
             case 'cod':
-                data.push('('); cod++
+                data.push('('); cod[0]++
                 break;
         }
     } else if (op == 'cod' && data[data.length - 1] != '.') {
-        op = cod % 2 == 0 ? '(' : ')'
-        if (typeof (data[data.length - 1]) == 'number' && cod % 2 == 0 || data[data.length - 1] == ')') {
-            data.push('*', op); cod++
-        } else if (cod % 2 == 1 && typeof (data[data.length - 1]) == 'number') {
-            data.push(op); cod++
+        op = cod[0] % 2 == 0 ? '(' : ')'
+        if (typeof (data[data.length - 1]) == 'number' && cod[0] % 2 == 0 || data[data.length - 1] == ')') {
+            data.push('*', op); cod[0]++
+        } else if (cod[0] % 2 == 1 && typeof (data[data.length - 1]) == 'number') {
+            data.push(op); cod[0]++
         } else if (cod % 2 == 0) {
-            data.push(op); cod++
+            data.push(op); cod[0]++
         }
-    } else {
-        if (typeof (data[data.length - 1]) == 'number' || (data[data.length - 1] == ')' && op != '.')) {
-            data.push(op)
-        }
+    } else if (op == '.' && cod[1] == 0 && typeof (data[data.length - 1]) == 'number'){
+        data.push(op)
+        cod[1] = 1
+    }
+    else if (op != '.' && typeof (data[data.length - 1]) == 'number' || data[data.length - 1] == ')'){
+        data.push(op)
+        cod[1] = 0
     }
     printar()
 }
